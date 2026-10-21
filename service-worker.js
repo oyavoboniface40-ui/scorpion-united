@@ -1,5 +1,5 @@
-const CACHE_NAME = 'scorpion-united-v2';
-const APP_SHELL = ['.', 'index.html', 'portal.html', 'admin.html', 'manifest.webmanifest', 'club.svg']
+const CACHE_NAME = 'scorpion-united-v3';
+const APP_SHELL = ['.', 'index.html', 'portal.html', 'admin.html', 'manifest.webmanifest', 'club.svg', 'team-illustration.svg']
   .map(path => new URL(path, self.registration.scope).href);
 const INDEX_URL = new URL('index.html', self.registration.scope).href;
 
