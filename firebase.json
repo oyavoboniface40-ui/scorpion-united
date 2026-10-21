@@ -6,6 +6,8 @@
       ".firebaserc",
       ".git/**",
       "**/.git/**",
+      ".firebase/**",
+      "**/.firebase/**",
       "FileContentIndex/**",
       "v18/**",
       "**/.*",
