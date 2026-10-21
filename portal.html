@@ -81,6 +81,8 @@
     .player-number { color: #a3b09e; font-size: 22px; font-weight: 900; }
     .player-name { margin-top: 5px; color: var(--forest); font-size: 12px; font-weight: 850; }
     .player-position { margin-top: 2px; color: var(--muted); font-size: 9px; }
+    .gallery { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .gallery img { display: block; width: 100%; aspect-ratio: 4 / 5; border-radius: 7px; background: #e5e9e4; object-fit: cover; }
     .empty { padding: 20px 0; color: var(--muted); font-size: 11px; text-align: center; }
     .join { padding: 0 0 48px; }
     .join-panel { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 24px 26px; border-radius: 7px; background: var(--lime); }
@@ -98,6 +100,7 @@
       .welcome-inner { grid-template-columns: 1fr; gap: 24px; }
       .welcome-art { max-height: 230px; }
       .columns { grid-template-columns: 1fr; }
+      .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
     }
     @media (max-width: 480px) {
       .container { width: min(100% - 28px, 520px); }
@@ -124,7 +127,7 @@
         <span><span class="brand-name">Scorpion United</span><span class="brand-caption">CLUB PORTAL</span></span>
       </a>
       <nav class="nav" aria-label="Club portal navigation">
-        <a href="#fixtures">Fixtures</a><a href="#news">Club news</a><a href="#squad">Squad</a><a href="#join">Join the club</a>
+        <a href="#fixtures">Fixtures</a><a href="#news">Club news</a><a href="#squad">Squad</a><a href="#gallery">Gallery</a><a href="#join">Join the club</a>
       </nav>
       <a class="button" href="./index.html">Main website</a>
     </div>
@@ -168,6 +171,19 @@
       <div class="container">
         <div class="section-head"><div><p class="eyebrow">Meet the team</p><h2>First-team squad</h2><p class="section-copy">Your Scorpion United players.</p></div><a class="sub-link" href="./index.html#squad">Squad details ↗</a></div>
         <div class="squad" id="squad-list" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="section" id="gallery">
+      <div class="container">
+        <div class="section-head"><div><p class="eyebrow">Club moments</p><h2>Scorpion United gallery</h2><p class="section-copy">A look at the people and moments that make our club.</p></div></div>
+        <div class="gallery" aria-label="Scorpion United club photos">
+          <img src="./club-photo-1.jpg" alt="Scorpion United club photo 1" width="768" height="1365" loading="lazy" />
+          <img src="./club-photo-2.jpg" alt="Scorpion United club photo 2" width="768" height="1365" loading="lazy" />
+          <img src="./club-photo-3.jpg" alt="Scorpion United club photo 3" width="768" height="1365" loading="lazy" />
+          <img src="./club-photo-4.jpg" alt="Scorpion United club photo 4" width="768" height="1365" loading="lazy" />
+          <img src="./club-photo-5.jpg" alt="Scorpion United club photo 5" width="768" height="1365" loading="lazy" />
+        </div>
       </div>
     </section>
 

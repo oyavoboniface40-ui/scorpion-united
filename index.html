@@ -90,12 +90,8 @@
     .fixture-status { justify-self: end; padding: 6px 10px; border-radius: 99px; background: #edf5e9; color: #326c3e; font-size: 9px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
     .empty-message { padding: 28px; border: 1px dashed #cbd7cd; border-radius: 7px; color: var(--muted); text-align: center; }
     .story-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 58px; align-items: center; }
-    .story-visual { position: relative; min-height: 390px; overflow: hidden; border-radius: 8px; background: linear-gradient(145deg, #5e9b61, #174c35 68%, #102a20); }
-    .story-visual::before { position: absolute; top: 13%; left: 9%; width: 82%; height: 74%; border: 1px solid rgba(255,255,255,.45); content: ""; }
-    .story-visual::after { position: absolute; top: 13%; bottom: 13%; left: 50%; border-left: 1px solid rgba(255,255,255,.38); content: ""; }
-    .pitch-circle { position: absolute; top: 50%; left: 50%; width: 110px; height: 110px; border: 1px solid rgba(255,255,255,.43); border-radius: 50%; transform: translate(-50%,-50%); }
-    .pitch-box { position: absolute; top: 32%; left: 9%; width: 17%; height: 36%; border: 1px solid rgba(255,255,255,.4); }
-    .pitch-box.right { right: 9%; left: auto; }
+    .story-visual { position: relative; min-height: 390px; overflow: hidden; border-radius: 8px; background: var(--forest); }
+    .story-visual img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
     .story-label { position: absolute; right: 20px; bottom: 20px; z-index: 1; padding: 10px 14px; border-radius: 4px; background: var(--lime); color: var(--forest); font-size: 10px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
     .story-copy h2 { max-width: 470px; }
     .story-copy p:not(.eyebrow) { margin: 17px 0; color: var(--muted); font-size: 14px; }
@@ -250,7 +246,7 @@
 
     <section class="section" id="club">
       <div class="container story-grid">
-        <div class="story-visual" role="img" aria-label="Illustration of a football pitch"><span class="pitch-circle"></span><span class="pitch-box"></span><span class="pitch-box right"></span><span class="story-label">Our home. Our people.</span></div>
+        <div class="story-visual"><img src="./team-illustration.svg" alt="Scorpion United players standing together on the pitch." width="760" height="400" loading="lazy" /><span class="story-label">Our home. Our people.</span></div>
         <div class="story-copy">
           <p class="eyebrow">Rooted in our community</p>
           <h2>A club built around the people who show up.</h2>
