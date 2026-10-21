@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Scorpion United crest">
+  <path d="M64 5 112 21v39c0 31-19 52-48 63C35 112 16 91 16 60V21L64 5Z" fill="#102a20"/>
+  <path d="M64 13 104 26v34c0 25-14 43-40 54C38 103 24 85 24 60V26l40-13Z" fill="none" stroke="#c6f36a" stroke-width="3"/>
+  <text x="64" y="77" fill="#fff" font-family="Arial, sans-serif" font-size="39" font-weight="800" letter-spacing="-4" text-anchor="middle">SU</text>
+  <path d="M36 96h56" fill="none" stroke="#e8bb54" stroke-linecap="round" stroke-width="5"/>
+</svg>

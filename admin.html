@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102a43">
+  <title>Club Admin | Scorpion United</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --navy: #102a43;
+      --navy-deep: #0b2033;
+      --blue: #1769aa;
+      --blue-light: #eaf3fb;
+      --green: #16835d;
+      --green-light: #e7f5ef;
+      --ink: #263746;
+      --muted: #718191;
+      --line: #e3eaf0;
+      --canvas: #f4f7fa;
+      --white: #fff;
+      --red: #bd3944;
+      --shadow: 0 8px 24px rgba(22, 48, 70, .06);
+    }
+
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--canvas); color: var(--ink); font: 14px/1.5 "Segoe UI", Arial, sans-serif; }
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; }
+    .app { min-height: 100vh; }
+    .sidebar { position: fixed; inset: 0 auto 0 0; z-index: 5; width: 246px; display: flex; flex-direction: column; padding: 22px 15px; background: var(--navy-deep); color: #d9e5ef; }
+    .brand { display: flex; align-items: center; gap: 11px; padding: 0 9px 27px; color: white; }
+    .brand-mark { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 12px; background: linear-gradient(135deg, #21bd82, #f4c956); color: #092b29; font-weight: 900; }
+    .brand-name { font-weight: 800; font-size: 15px; line-height: 1.2; }
+    .brand-caption { display: block; margin-top: 3px; color: #9fb2c3; font-size: 10px; letter-spacing: .09em; }
+    .nav-label { padding: 11px 10px 7px; color: #8da2b4; font-size: 10px; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
+    .nav-link { width: 100%; display: flex; align-items: center; gap: 12px; padding: 11px 12px; border: 0; border-radius: 7px; background: transparent; color: #c4d2df; text-align: left; font-weight: 600; }
+    .nav-link:hover, .nav-link.active { background: #1a3c58; color: white; }
+    .nav-icon { width: 20px; color: #86a4bb; text-align: center; font-size: 16px; }
+    .sidebar-bottom { margin-top: auto; padding: 13px 10px 0; border-top: 1px solid rgba(255,255,255,.12); color: #a9bdcc; font-size: 12px; }
+    .sidebar-bottom strong { display: block; margin-bottom: 3px; color: white; font-size: 13px; }
+    .main { min-height: 100vh; margin-left: 246px; }
+    .topbar { height: 70px; display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 0 32px; border-bottom: 1px solid var(--line); background: white; }
+    .crumb { color: var(--muted); font-size: 13px; }
+    .crumb strong { color: var(--navy); }
+    .top-actions { display: flex; align-items: center; gap: 12px; }
+    .avatar { width: 35px; height: 35px; display: grid; place-items: center; border-radius: 50%; background: var(--blue-light); color: var(--blue); font-weight: 800; }
+    .admin-label { color: var(--muted); font-size: 12px; }
+    .content { width: min(1400px, 100%); margin: auto; padding: 30px 32px 50px; }
+    .page-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 18px; margin-bottom: 24px; }
+    .page-heading h1 { margin: 0; color: var(--navy); font-size: clamp(24px, 3vw, 31px); letter-spacing: -.035em; }
+    .page-heading p { margin: 5px 0 0; color: var(--muted); }
+    .button { min-height: 39px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 8px 14px; border: 1px solid transparent; border-radius: 7px; font-weight: 700; font-size: 13px; transition: .16s ease; }
+    .button:hover { transform: translateY(-1px); }
+    .button-primary { background: var(--blue); color: white; }
+    .button-primary:hover { background: #125991; }
+    .button-outline { border-color: #cbd7e1; background: white; color: var(--navy); }
+    .button-danger { border-color: #f0ccd0; background: #fff7f7; color: var(--red); }
+    .button-small { min-height: 31px; padding: 5px 9px; font-size: 12px; }
+    .notice { margin-bottom: 20px; padding: 11px 14px; border: 1px solid #efdfad; border-radius: 7px; background: #fff9e8; color: #735719; font-size: 12px; }
+    .notice strong { color: #5a4310; }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 15px; margin-bottom: 22px; }
+    .stat-card { padding: 18px; border: 1px solid var(--line); border-radius: 10px; background: white; box-shadow: var(--shadow); }
+    .stat-label { color: var(--muted); font-size: 12px; font-weight: 650; }
+    .stat-value { margin: 7px 0 2px; color: var(--navy); font-size: 28px; font-weight: 800; line-height: 1.1; }
+    .stat-foot { color: #8a99a6; font-size: 11px; }
+    .dashboard-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 18px; }
+    .panel { overflow: hidden; border: 1px solid var(--line); border-radius: 10px; background: white; box-shadow: var(--shadow); }
+    .panel-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 17px 19px; border-bottom: 1px solid var(--line); }
+    .panel-head h2 { margin: 0; color: var(--navy); font-size: 15px; }
+    .panel-body { padding: 18px 19px; }
+    .quick-list { display: grid; gap: 13px; }
+    .quick-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding-bottom: 12px; border-bottom: 1px solid #eef2f5; }
+    .quick-row:last-child { padding-bottom: 0; border: 0; }
+    .quick-title { color: var(--navy); font-weight: 700; }
+    .quick-meta { margin-top: 3px; color: var(--muted); font-size: 12px; }
+    .badge { display: inline-flex; align-items: center; padding: 4px 8px; border-radius: 99px; background: #eef3f7; color: #546879; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; white-space: nowrap; }
+    .badge-published, .badge-confirmed, .badge-active { background: var(--green-light); color: var(--green); }
+    .badge-draft, .badge-scheduled { background: #fff4d9; color: #866411; }
+    .quick-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .quick-action { min-height: 78px; padding: 13px; border: 1px solid var(--line); border-radius: 8px; background: white; color: var(--navy); text-align: left; font-weight: 700; }
+    .quick-action:hover { border-color: #a9cbe3; background: #f8fbfe; }
+    .quick-action span { display: block; margin-bottom: 3px; color: var(--blue); font-size: 19px; }
+    .section-view[hidden] { display: none; }
+    .toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 15px 18px; border-bottom: 1px solid var(--line); }
+    .toolbar-search { width: min(330px, 100%); min-height: 38px; padding: 8px 11px; border: 1px solid #d5dfe7; border-radius: 6px; background: white; outline: none; }
+    .toolbar-search:focus, input:focus, select:focus, textarea:focus { border-color: #6ca5d0; box-shadow: 0 0 0 3px rgba(23,105,170,.11); outline: none; }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; white-space: nowrap; }
+    th, td { padding: 13px 17px; border-bottom: 1px solid #edf1f4; text-align: left; }
+    th { background: #fbfcfd; color: #738392; font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    td { color: #405261; font-size: 12px; }
+    tbody tr:hover { background: #fbfdff; }
+    tbody tr:last-child td { border-bottom: 0; }
+    .person-cell { display: flex; align-items: center; gap: 10px; color: var(--navy); font-weight: 700; }
+    .person-avatar { width: 31px; height: 31px; display: grid; place-items: center; border-radius: 50%; background: #eaf3fb; color: #1769aa; font-size: 11px; font-weight: 800; }
+    .row-actions { display: flex; justify-content: flex-end; gap: 6px; }
+    .empty-row { padding: 35px; color: var(--muted); text-align: center; }
+    .pagination-note { padding: 12px 17px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; }
+    .toast { position: fixed; z-index: 30; right: 22px; bottom: 22px; max-width: min(390px, calc(100vw - 30px)); display: none; padding: 13px 16px; border-radius: 8px; background: var(--navy-deep); color: white; box-shadow: 0 8px 30px rgba(0,0,0,.2); }
+    .toast.show { display: block; }
+    .toast.error { background: #9d2632; }
+    .modal-backdrop { position: fixed; z-index: 20; inset: 0; display: none; place-items: center; overflow-y: auto; padding: 20px; background: rgba(11,32,51,.55); }
+    .modal-backdrop.open { display: grid; }
+    .modal { width: min(100%, 540px); padding: 22px; border-radius: 11px; background: white; box-shadow: 0 20px 65px rgba(0,0,0,.2); }
+    .modal-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; margin-bottom: 18px; }
+    .modal-header h2 { margin: 0; color: var(--navy); font-size: 20px; }
+    .modal-header p { margin: 4px 0 0; color: var(--muted); font-size: 12px; }
+    .close-button { width: 33px; height: 33px; border: 0; border-radius: 50%; background: #f1f4f7; color: #536575; font-size: 20px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .field { display: grid; gap: 5px; }
+    .field.full { grid-column: 1 / -1; }
+    .field label { color: #435564; font-size: 12px; font-weight: 700; }
+    .field input, .field select, .field textarea { width: 100%; min-height: 39px; padding: 8px 10px; border: 1px solid #d5dfe7; border-radius: 6px; background: white; color: var(--ink); }
+    .field textarea { min-height: 88px; resize: vertical; }
+    .form-footer { display: flex; justify-content: flex-end; gap: 9px; margin-top: 21px; }
+    .mobile-menu { display: none; }
+
+    @media (max-width: 980px) {
+      .sidebar { width: 215px; }
+      .main { margin-left: 215px; }
+      .content { padding-inline: 22px; }
+      .topbar { padding-inline: 22px; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 720px) {
+      .sidebar { position: static; width: auto; min-height: auto; padding: 10px 15px; }
+      .sidebar .brand { padding: 0; }
+      .sidebar .nav-label, .sidebar .sidebar-bottom { display: none; }
+      .sidebar nav { display: flex; gap: 4px; overflow-x: auto; padding-top: 12px; }
+      .nav-link { width: auto; flex: 0 0 auto; padding: 8px 10px; font-size: 12px; }
+      .nav-icon { display: none; }
+      .main { margin-left: 0; }
+      .topbar { height: 54px; padding-inline: 17px; }
+      .content { padding: 22px 15px 35px; }
+      .dashboard-grid { grid-template-columns: 1fr; }
+      .page-heading { align-items: flex-start; }
+      .page-heading .button { flex-shrink: 0; }
+    }
+    @media (max-width: 480px) {
+      .stats-grid { gap: 9px; }
+      .stat-card { padding: 13px; }
+      .stat-value { font-size: 24px; }
+      .admin-label { display: none; }
+      .page-heading { flex-direction: column; }
+      .page-heading .button { align-self: stretch; }
+      .toolbar { align-items: stretch; flex-direction: column; }
+      .toolbar-search { width: 100%; }
+      .form-grid { grid-template-columns: 1fr; }
+      .field.full { grid-column: auto; }
+      th, td { padding-inline: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <a class="brand" href="#dashboard" aria-label="Scorpion United admin dashboard">
+        <span class="brand-mark">SU</span>
+        <span><span class="brand-name">Scorpion United</span><span class="brand-caption">CLUB ADMIN PORTAL</span></span>
+      </a>
+      <div class="nav-label">Workspace</div>
+      <nav aria-label="Admin sections">
+        <button class="nav-link active" type="button" data-view="dashboard"><span class="nav-icon">▦</span>Overview</button>
+        <button class="nav-link" type="button" data-view="players"><span class="nav-icon">♙</span>Players</button>
+        <button class="nav-link" type="button" data-view="fixtures"><span class="nav-icon">⚽</span>Fixtures</button>
+        <button class="nav-link" type="button" data-view="news"><span class="nav-icon">▤</span>News</button>
+      </nav>
+      <div class="sidebar-bottom"><strong>Scorpion United</strong>Nandi County, Terrik Ward<br>Season 2026</div>
+    </aside>
+
+    <main class="main">
+      <div class="topbar">
+        <div class="crumb">Scorpion United <span aria-hidden="true">/</span> <strong id="breadcrumb">Overview</strong></div>
+        <div class="top-actions"><a class="button button-outline button-small" href="./portal.html">Club portal</a><span class="admin-label">Club administrator</span><span class="avatar" aria-hidden="true">A</span></div>
+      </div>
+
+      <div class="content">
+        <div class="notice"><strong>Demo admin portal.</strong> This front-end saves data only in this browser. It has no server, real authentication, or shared database; do not use real or sensitive information.</div>
+
+        <section class="section-view" id="view-dashboard">
+          <div class="page-heading"><div><h1>Club overview</h1><p>Manage Scorpion United's squad, fixtures and club news.</p></div></div>
+          <div class="stats-grid">
+            <article class="stat-card"><div class="stat-label">First-team players</div><div class="stat-value" id="metric-players">0</div><div class="stat-foot">Players on the roster</div></article>
+            <article class="stat-card"><div class="stat-label">Upcoming fixtures</div><div class="stat-value" id="metric-fixtures">0</div><div class="stat-foot">Scheduled matches</div></article>
+            <article class="stat-card"><div class="stat-label">Published news</div><div class="stat-value" id="metric-news">0</div><div class="stat-foot">Visible club updates</div></article>
+            <article class="stat-card"><div class="stat-label">Draft news</div><div class="stat-value" id="metric-drafts">0</div><div class="stat-foot">Articles not published</div></article>
+          </div>
+          <div class="dashboard-grid">
+            <section class="panel">
+              <div class="panel-head"><h2>Next fixtures</h2><button class="button button-outline button-small" type="button" data-go="fixtures">Manage fixtures</button></div>
+              <div class="panel-body"><div class="quick-list" id="dashboard-fixtures"></div></div>
+            </section>
+            <section class="panel">
+              <div class="panel-head"><h2>Quick actions</h2></div>
+              <div class="panel-body quick-actions">
+                <button class="quick-action" type="button" data-new="players"><span>＋</span>Add a player</button>
+                <button class="quick-action" type="button" data-new="fixtures"><span>⚽</span>Create fixture</button>
+                <button class="quick-action" type="button" data-new="news"><span>▤</span>Write club news</button>
+                <button class="quick-action" type="button" data-go="players"><span>♙</span>View squad</button>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="section-view" id="view-players" hidden>
+          <div class="page-heading"><div><h1>Players</h1><p>Maintain the first-team roster and player details.</p></div><button class="button button-primary" type="button" data-new="players">＋ Add player</button></div>
+          <section class="panel">
+            <div class="toolbar"><strong id="players-count">Squad roster</strong><input class="toolbar-search" id="players-search" type="search" placeholder="Search name, position or number" aria-label="Search players"></div>
+            <div class="table-wrap"><table><thead><tr><th>Player</th><th>Number</th><th>Position</th><th>Nationality</th><th>Status</th><th>Actions</th></tr></thead><tbody id="players-table"></tbody></table></div>
+            <div class="pagination-note">Player records are stored locally in this browser.</div>
+          </section>
+        </section>
+
+        <section class="section-view" id="view-fixtures" hidden>
+          <div class="page-heading"><div><h1>Fixtures</h1><p>Schedule matches and update fixture status.</p></div><button class="button button-primary" type="button" data-new="fixtures">＋ Add fixture</button></div>
+          <section class="panel">
+            <div class="toolbar"><strong id="fixtures-count">Match schedule</strong><input class="toolbar-search" id="fixtures-search" type="search" placeholder="Search opponent, venue or competition" aria-label="Search fixtures"></div>
+            <div class="table-wrap"><table><thead><tr><th>Date</th><th>Opponent</th><th>Competition</th><th>Venue</th><th>Status</th><th>Actions</th></tr></thead><tbody id="fixtures-table"></tbody></table></div>
+            <div class="pagination-note">Dates use your device's local time zone.</div>
+          </section>
+        </section>
+
+        <section class="section-view" id="view-news" hidden>
+          <div class="page-heading"><div><h1>Club news</h1><p>Create club updates and control whether each article is a draft or published.</p></div><button class="button button-primary" type="button" data-new="news">＋ Write article</button></div>
+          <section class="panel">
+            <div class="toolbar"><strong id="news-count">News articles</strong><input class="toolbar-search" id="news-search" type="search" placeholder="Search title, category or summary" aria-label="Search news"></div>
+            <div class="table-wrap"><table><thead><tr><th>Article</th><th>Category</th><th>Created</th><th>Status</th><th>Actions</th></tr></thead><tbody id="news-table"></tbody></table></div>
+            <div class="pagination-note">Publishing here only changes this local demo; it does not publish to a live website.</div>
+          </section>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="editor" role="dialog" aria-modal="true" aria-labelledby="editor-title">
+    <form class="modal" id="record-form">
+      <div class="modal-header"><div><h2 id="editor-title">Add record</h2><p id="editor-description"></p></div><button class="close-button" type="button" data-close aria-label="Close form">×</button></div>
+      <div class="form-grid" id="form-fields"></div>
+      <div class="form-footer"><button class="button button-outline" type="button" data-close>Cancel</button><button class="button button-primary" type="submit">Save record</button></div>
+    </form>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const storageKey = 'riverside-fc-admin-v1';
+    const initialData = {
+      players: [
+        { id: 'p1', name: 'Leo Grant', number: '1', position: 'Goalkeeper', nationality: 'Kenya', status: 'Active' },
+        { id: 'p2', name: 'Aiden Moss', number: '4', position: 'Defender', nationality: 'Kenya', status: 'Active' },
+        { id: 'p3', name: 'Jamal Reed', number: '8', position: 'Midfielder', nationality: 'Uganda', status: 'Active' },
+        { id: 'p4', name: 'Mason Cole', number: '10', position: 'Forward', nationality: 'Kenya', status: 'Active' }
+      ],
+      fixtures: [
+        { id: 'f1', date: '2026-10-10T16:00', opponent: 'City FC', competition: 'Premier League', venue: 'Scorpion Stadium', status: 'Scheduled' },
+        { id: 'f2', date: '2026-10-17T15:00', opponent: 'Northside United', competition: 'Premier League', venue: 'Northside Ground', status: 'Scheduled' },
+        { id: 'f3', date: '2026-10-24T18:30', opponent: 'Harbor Athletic', competition: 'County Cup', venue: 'Scorpion Stadium', status: 'Scheduled' }
+      ],
+      news: [
+        { id: 'n1', title: 'Scorpion United prepare for the city derby', category: 'First team', summary: 'The squad is ready for the upcoming home fixture.', created: '2026-10-03', status: 'Published' },
+        { id: 'n2', title: 'Academy players join senior training', category: 'Academy', summary: 'Three academy players trained with the first team this week.', created: '2026-10-02', status: 'Draft' }
+      ]
+    };
+    const fields = {
+      players: [
+        { name: 'name', label: 'Player name', type: 'text', required: true, maxLength: 70 },
+        { name: 'number', label: 'Squad number', type: 'number', required: true, min: 1, max: 99 },
+        { name: 'position', label: 'Position', type: 'select', required: true, options: ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'] },
+        { name: 'nationality', label: 'Nationality', type: 'text', required: true, maxLength: 50 },
+        { name: 'status', label: 'Status', type: 'select', required: true, options: ['Active', 'Injured', 'Unavailable'] }
+      ],
+      fixtures: [
+        { name: 'date', label: 'Date and time', type: 'datetime-local', required: true },
+        { name: 'opponent', label: 'Opponent', type: 'text', required: true, maxLength: 70 },
+        { name: 'competition', label: 'Competition', type: 'text', required: true, maxLength: 70 },
+        { name: 'venue', label: 'Venue', type: 'text', required: true, maxLength: 100 },
+        { name: 'status', label: 'Status', type: 'select', required: true, options: ['Scheduled', 'Confirmed', 'Completed', 'Postponed'] }
+      ],
+      news: [
+        { name: 'title', label: 'Article title', type: 'text', required: true, maxLength: 120, full: true },
+        { name: 'category', label: 'Category', type: 'select', required: true, options: ['First team', 'Academy', 'Community', 'Club'], full: false },
+        { name: 'created', label: 'Date', type: 'date', required: true },
+        { name: 'summary', label: 'Summary', type: 'textarea', required: true, maxLength: 500, full: true },
+        { name: 'status', label: 'Publication status', type: 'select', required: true, options: ['Draft', 'Published'], full: true }
+      ]
+    };
+
+    let data;
+    let editing = null;
+    let toastTimer;
+    const toast = document.querySelector('#toast');
+    const editor = document.querySelector('#editor');
+    const form = document.querySelector('#record-form');
+
+    function showToast(message, isError = false) {
+      toast.textContent = message;
+      toast.classList.toggle('error', isError);
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 3600);
+    }
+
+    function loadData() {
+      try {
+        const stored = localStorage.getItem(storageKey);
+        if (!stored) return structuredClone(initialData);
+        const parsed = JSON.parse(stored);
+        if (!parsed || !['players', 'fixtures', 'news'].every(key => Array.isArray(parsed[key]))) {
+          throw new Error('Saved admin data is not in the expected format.');
+        }
+        return parsed;
+      } catch (error) {
+        showToast(`Could not load saved data: ${error.message}. Showing sample data instead.`, true);
+        return structuredClone(initialData);
+      }
+    }
+
+    function saveData() {
+      try {
+        localStorage.setItem(storageKey, JSON.stringify(data));
+        return true;
+      } catch (error) {
+        showToast(`Could not save changes in this browser: ${error.message}`, true);
+        return false;
+      }
+    }
+
+    function makeCell(text) {
+      const cell = document.createElement('td');
+      cell.textContent = text;
+      return cell;
+    }
+
+    function makeBadge(text) {
+      const badge = document.createElement('span');
+      badge.className = `badge badge-${String(text).toLowerCase().replace(/[^a-z]+/g, '-')}`;
+      badge.textContent = text;
+      return badge;
+    }
+
+    function makeActions(entity, record) {
+      const cell = document.createElement('td');
+      const actions = document.createElement('div');
+      actions.className = 'row-actions';
+      const edit = document.createElement('button');
+      edit.type = 'button';
+      edit.className = 'button button-outline button-small';
+      edit.textContent = 'Edit';
+      edit.setAttribute('aria-label', `Edit ${record.name || record.title || record.opponent}`);
+      edit.addEventListener('click', () => openEditor(entity, record.id));
+      const remove = document.createElement('button');
+      remove.type = 'button';
+      remove.className = 'button button-danger button-small';
+      remove.textContent = 'Delete';
+      remove.setAttribute('aria-label', `Delete ${record.name || record.title || record.opponent}`);
+      remove.addEventListener('click', () => deleteRecord(entity, record.id));
+      actions.append(edit, remove);
+      cell.append(actions);
+      return cell;
+    }
+
+    function makeEmptyRow(tableBody, columns, message) {
+      const row = document.createElement('tr');
+      const cell = document.createElement('td');
+      cell.colSpan = columns;
+      cell.className = 'empty-row';
+      cell.textContent = message;
+      row.append(cell);
+      tableBody.append(row);
+    }
+
+    function renderPlayers() {
+      const body = document.querySelector('#players-table');
+      const query = document.querySelector('#players-search').value.trim().toLocaleLowerCase();
+      const records = data.players.filter(player => Object.values(player).join(' ').toLocaleLowerCase().includes(query));
+      body.replaceChildren();
+      records.forEach(player => {
+        const row = document.createElement('tr');
+        const personCell = document.createElement('td');
+        const person = document.createElement('div');
+        person.className = 'person-cell';
+        const avatar = document.createElement('span');
+        avatar.className = 'person-avatar';
+        avatar.textContent = player.name.split(/\s+/).map(part => part[0] || '').slice(0, 2).join('').toUpperCase();
+        const name = document.createElement('span');
+        name.textContent = player.name;
+        person.append(avatar, name);
+        personCell.append(person);
+        row.append(personCell, makeCell(`#${player.number}`), makeCell(player.position), makeCell(player.nationality));
+        const status = document.createElement('td');
+        status.append(makeBadge(player.status));
+        row.append(status, makeActions('players', player));
+        body.append(row);
+      });
+      if (!records.length) makeEmptyRow(body, 6, query ? 'No players match your search.' : 'No players yet. Add a player to get started.');
+      document.querySelector('#players-count').textContent = `${records.length} ${records.length === 1 ? 'player' : 'players'}`;
+    }
+
+    function formatDate(value, withTime = false) {
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return value;
+      return new Intl.DateTimeFormat(undefined, withTime ? { dateStyle: 'medium', timeStyle: 'short' } : { dateStyle: 'medium' }).format(date);
+    }
+
+    function renderFixtures() {
+      const body = document.querySelector('#fixtures-table');
+      const query = document.querySelector('#fixtures-search').value.trim().toLocaleLowerCase();
+      const records = [...data.fixtures].sort((a, b) => a.date.localeCompare(b.date))
+        .filter(item => Object.values(item).join(' ').toLocaleLowerCase().includes(query));
+      body.replaceChildren();
+      records.forEach(item => {
+        const row = document.createElement('tr');
+        row.append(makeCell(formatDate(item.date, true)), makeCell(item.opponent), makeCell(item.competition), makeCell(item.venue));
+        const status = document.createElement('td');
+        status.append(makeBadge(item.status));
+        row.append(status, makeActions('fixtures', item));
+        body.append(row);
+      });
+      if (!records.length) makeEmptyRow(body, 6, query ? 'No fixtures match your search.' : 'No fixtures yet. Add a fixture to get started.');
+      document.querySelector('#fixtures-count').textContent = `${records.length} ${records.length === 1 ? 'fixture' : 'fixtures'}`;
+    }
+
+    function renderNews() {
+      const body = document.querySelector('#news-table');
+      const query = document.querySelector('#news-search').value.trim().toLocaleLowerCase();
+      const records = [...data.news].sort((a, b) => b.created.localeCompare(a.created))
+        .filter(item => Object.values(item).join(' ').toLocaleLowerCase().includes(query));
+      body.replaceChildren();
+      records.forEach(item => {
+        const row = document.createElement('tr');
+        const titleCell = document.createElement('td');
+        const title = document.createElement('strong');
+        title.textContent = item.title;
+        titleCell.append(title);
+        row.append(titleCell, makeCell(item.category), makeCell(formatDate(item.created)));
+        const status = document.createElement('td');
+        status.append(makeBadge(item.status));
+        row.append(status, makeActions('news', item));
+        body.append(row);
+      });
+      if (!records.length) makeEmptyRow(body, 5, query ? 'No articles match your search.' : 'No news yet. Write an article to get started.');
+      document.querySelector('#news-count').textContent = `${records.length} ${records.length === 1 ? 'article' : 'articles'}`;
+    }
+
+    function renderDashboard() {
+      document.querySelector('#metric-players').textContent = data.players.length;
+      document.querySelector('#metric-fixtures').textContent = data.fixtures.filter(item => ['Scheduled', 'Confirmed'].includes(item.status)).length;
+      document.querySelector('#metric-news').textContent = data.news.filter(item => item.status === 'Published').length;
+      document.querySelector('#metric-drafts').textContent = data.news.filter(item => item.status === 'Draft').length;
+      const list = document.querySelector('#dashboard-fixtures');
+      list.replaceChildren();
+      const upcoming = data.fixtures.filter(item => item.status !== 'Completed' && item.status !== 'Postponed')
+        .sort((a, b) => a.date.localeCompare(b.date)).slice(0, 4);
+      if (!upcoming.length) {
+        const empty = document.createElement('p');
+        empty.className = 'quick-meta';
+        empty.textContent = 'No upcoming fixtures. Add one using Quick actions.';
+        list.append(empty);
+        return;
+      }
+      upcoming.forEach(item => {
+        const row = document.createElement('div');
+        row.className = 'quick-row';
+        const details = document.createElement('div');
+        const title = document.createElement('div');
+        title.className = 'quick-title';
+        title.textContent = `Scorpion United vs ${item.opponent}`;
+        const meta = document.createElement('div');
+        meta.className = 'quick-meta';
+        meta.textContent = `${formatDate(item.date, true)} · ${item.venue}`;
+        details.append(title, meta);
+        row.append(details, makeBadge(item.status));
+        list.append(row);
+      });
+    }
+
+    function renderAll() {
+      renderDashboard();
+      renderPlayers();
+      renderFixtures();
+      renderNews();
+    }
+
+    function showView(name) {
+      document.querySelectorAll('.section-view').forEach(section => { section.hidden = section.id !== `view-${name}`; });
+      document.querySelectorAll('.nav-link').forEach(button => button.classList.toggle('active', button.dataset.view === name));
+      const selected = document.querySelector(`.nav-link[data-view="${name}"]`);
+      document.querySelector('#breadcrumb').textContent = selected ? selected.textContent.trim() : 'Overview';
+    }
+
+    function appendFormField(spec, value) {
+      const wrapper = document.createElement('div');
+      wrapper.className = `field${spec.full ? ' full' : ''}`;
+      const label = document.createElement('label');
+      label.htmlFor = `field-${spec.name}`;
+      label.textContent = spec.label;
+      let input;
+      if (spec.type === 'select') {
+        input = document.createElement('select');
+        spec.options.forEach(optionValue => {
+          const option = document.createElement('option');
+          option.value = optionValue;
+          option.textContent = optionValue;
+          input.append(option);
+        });
+      } else if (spec.type === 'textarea') {
+        input = document.createElement('textarea');
+      } else {
+        input = document.createElement('input');
+        input.type = spec.type;
+      }
+      input.id = `field-${spec.name}`;
+      input.name = spec.name;
+      input.required = Boolean(spec.required);
+      if (spec.maxLength) input.maxLength = spec.maxLength;
+      if (spec.min !== undefined) input.min = String(spec.min);
+      if (spec.max !== undefined) input.max = String(spec.max);
+      input.value = value ?? '';
+      wrapper.append(label, input);
+      document.querySelector('#form-fields').append(wrapper);
+    }
+
+    function openEditor(entity, id = null) {
+      editing = { entity, id };
+      const record = id ? data[entity].find(item => item.id === id) : null;
+      document.querySelector('#editor-title').textContent = `${record ? 'Edit' : 'Add'} ${entity === 'players' ? 'player' : entity === 'fixtures' ? 'fixture' : 'news article'}`;
+      document.querySelector('#editor-description').textContent = 'Changes are saved to this browser only.';
+      const container = document.querySelector('#form-fields');
+      container.replaceChildren();
+      fields[entity].forEach(spec => appendFormField(spec, record?.[spec.name]));
+      editor.classList.add('open');
+      document.querySelector(`#field-${fields[entity][0].name}`).focus();
+    }
+
+    function closeEditor() {
+      editor.classList.remove('open');
+      form.reset();
+      editing = null;
+    }
+
+    function deleteRecord(entity, id) {
+      const record = data[entity].find(item => item.id === id);
+      const label = record?.name || record?.title || record?.opponent || 'this record';
+      if (!window.confirm(`Delete "${label}"? This cannot be undone.`)) return;
+      const previous = data[entity];
+      data[entity] = previous.filter(item => item.id !== id);
+      if (saveData()) {
+        renderAll();
+        showToast('Record deleted.');
+      } else {
+        data[entity] = previous;
+        renderAll();
+      }
+    }
+
+    document.querySelectorAll('.nav-link').forEach(button => button.addEventListener('click', () => showView(button.dataset.view)));
+    document.querySelectorAll('[data-go]').forEach(button => button.addEventListener('click', () => showView(button.dataset.go)));
+    document.querySelectorAll('[data-new]').forEach(button => button.addEventListener('click', () => openEditor(button.dataset.new)));
+    document.querySelectorAll('[data-close]').forEach(button => button.addEventListener('click', closeEditor));
+    editor.addEventListener('click', event => { if (event.target === editor) closeEditor(); });
+    document.addEventListener('keydown', event => { if (event.key === 'Escape' && editor.classList.contains('open')) closeEditor(); });
+    document.querySelector('#players-search').addEventListener('input', renderPlayers);
+    document.querySelector('#fixtures-search').addEventListener('input', renderFixtures);
+    document.querySelector('#news-search').addEventListener('input', renderNews);
+
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      if (!editing || !form.reportValidity()) return;
+      const { entity, id } = editing;
+      const values = Object.fromEntries(new FormData(form).entries());
+      const collection = data[entity];
+      const previous = collection.slice();
+      if (id) {
+        const index = collection.findIndex(item => item.id === id);
+        if (index < 0) {
+          showToast('This record no longer exists. Refresh the list and try again.', true);
+          closeEditor();
+          return;
+        }
+        collection[index] = { ...collection[index], ...values };
+      } else {
+        collection.push({ id: `${entity[0]}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`, ...values });
+      }
+      if (saveData()) {
+        renderAll();
+        closeEditor();
+        showToast(id ? 'Changes saved.' : 'Record added.');
+      } else {
+        data[entity] = previous;
+      }
+    });
+
+    data = loadData();
+    renderAll();
+  </script>
+</body>
+</html>
