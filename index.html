@@ -313,10 +313,16 @@
     const storageKey = 'riverside-fc-admin-v1';
     const sampleData = {
       players: [
-        { id: 'p1', name: 'Leo Grant', number: '1', position: 'Goalkeeper', nationality: 'Kenya', status: 'Active' },
-        { id: 'p2', name: 'Aiden Moss', number: '4', position: 'Defender', nationality: 'Kenya', status: 'Active' },
-        { id: 'p3', name: 'Jamal Reed', number: '8', position: 'Midfielder', nationality: 'Uganda', status: 'Active' },
-        { id: 'p4', name: 'Mason Cole', number: '10', position: 'Forward', nationality: 'Kenya', status: 'Active' }
+        { id: 'p1', name: 'Collins Mbaira', number: '1', position: 'Goalkeeper', nationality: 'Not specified', status: 'Active' },
+        { id: 'p2', name: 'Steward Otiende', number: '4', position: 'Defender', nationality: 'Not specified', status: 'Active' },
+        { id: 'p3', name: 'Euston Tsnalo', number: '5', position: 'Defender', nationality: 'Not specified', status: 'Active' },
+        { id: 'p4', name: 'Collins Odenyo', number: '2', position: 'Defender', nationality: 'Not specified', status: 'Active' },
+        { id: 'p5', name: 'Rueben Oroch', number: '8', position: 'Midfielder', nationality: 'Not specified', status: 'Active' },
+        { id: 'p6', name: 'Collo', number: '7', position: 'Winger', nationality: 'Not specified', status: 'Active' },
+        { id: 'p7', name: 'Newton', number: '6', position: 'Midfielder', nationality: 'Not specified', status: 'Active' },
+        { id: 'p8', name: 'Ramsay Chose', number: '9', position: 'Striker', nationality: 'Not specified', status: 'Active' },
+        { id: 'p9', name: 'Para', number: '10', position: 'Attacking midfielder', nationality: 'Not specified', status: 'Active' },
+        { id: 'p10', name: 'Calvin', number: '11', position: 'Left winger', nationality: 'Not specified', status: 'Active' }
       ],
       fixtures: [
         { id: 'f1', date: '2026-10-10T16:00', opponent: 'City FC', competition: 'Premier League', venue: 'Scorpion Stadium', status: 'Scheduled' },
@@ -447,7 +453,7 @@
     function renderSquad(data) {
       const grid = document.querySelector('#squad-grid');
       grid.replaceChildren();
-      const players = data.players.filter(player => player.status === 'Active').slice(0, 4);
+      const players = data.players.filter(player => player.status === 'Active').slice(0, 10);
       if (!players.length) {
         const empty = document.createElement('p');
         empty.className = 'empty-message';

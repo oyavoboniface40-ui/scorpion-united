@@ -190,10 +190,16 @@
     const storageKey = 'riverside-fc-admin-v1';
     const sampleData = {
       players: [
-        { name: 'Leo Grant', number: '1', position: 'Goalkeeper', status: 'Active' },
-        { name: 'Aiden Moss', number: '4', position: 'Defender', status: 'Active' },
-        { name: 'Jamal Reed', number: '8', position: 'Midfielder', status: 'Active' },
-        { name: 'Mason Cole', number: '10', position: 'Forward', status: 'Active' }
+        { name: 'Collins Mbaira', number: '1', position: 'Goalkeeper', status: 'Active' },
+        { name: 'Steward Otiende', number: '4', position: 'Defender', status: 'Active' },
+        { name: 'Euston Tsnalo', number: '5', position: 'Defender', status: 'Active' },
+        { name: 'Collins Odenyo', number: '2', position: 'Defender', status: 'Active' },
+        { name: 'Rueben Oroch', number: '8', position: 'Midfielder', status: 'Active' },
+        { name: 'Collo', number: '7', position: 'Winger', status: 'Active' },
+        { name: 'Newton', number: '6', position: 'Midfielder', status: 'Active' },
+        { name: 'Ramsay Chose', number: '9', position: 'Striker', status: 'Active' },
+        { name: 'Para', number: '10', position: 'Attacking midfielder', status: 'Active' },
+        { name: 'Calvin', number: '11', position: 'Left winger', status: 'Active' }
       ],
       fixtures: [
         { date: '2026-10-10T16:00', opponent: 'City FC', competition: 'Premier League', venue: 'Scorpion Stadium', status: 'Scheduled' },
@@ -297,7 +303,7 @@
       const squad = document.querySelector('#squad-list');
       squad.replaceChildren();
       if (!players.length) appendEmpty(squad, 'The first-team squad will be announced soon.');
-      players.slice(0, 8).forEach(item => {
+      players.slice(0, 10).forEach(item => {
         const card = document.createElement('article');
         card.className = 'player';
         const number = document.createElement('div');

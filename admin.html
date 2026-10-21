@@ -246,10 +246,16 @@
     const storageKey = 'riverside-fc-admin-v1';
     const initialData = {
       players: [
-        { id: 'p1', name: 'Leo Grant', number: '1', position: 'Goalkeeper', nationality: 'Kenya', status: 'Active' },
-        { id: 'p2', name: 'Aiden Moss', number: '4', position: 'Defender', nationality: 'Kenya', status: 'Active' },
-        { id: 'p3', name: 'Jamal Reed', number: '8', position: 'Midfielder', nationality: 'Uganda', status: 'Active' },
-        { id: 'p4', name: 'Mason Cole', number: '10', position: 'Forward', nationality: 'Kenya', status: 'Active' }
+        { id: 'p1', name: 'Collins Mbaira', number: '1', position: 'Goalkeeper', nationality: 'Not specified', status: 'Active' },
+        { id: 'p2', name: 'Steward Otiende', number: '4', position: 'Defender', nationality: 'Not specified', status: 'Active' },
+        { id: 'p3', name: 'Euston Tsnalo', number: '5', position: 'Defender', nationality: 'Not specified', status: 'Active' },
+        { id: 'p4', name: 'Collins Odenyo', number: '2', position: 'Defender', nationality: 'Not specified', status: 'Active' },
+        { id: 'p5', name: 'Rueben Oroch', number: '8', position: 'Midfielder', nationality: 'Not specified', status: 'Active' },
+        { id: 'p6', name: 'Collo', number: '7', position: 'Winger', nationality: 'Not specified', status: 'Active' },
+        { id: 'p7', name: 'Newton', number: '6', position: 'Midfielder', nationality: 'Not specified', status: 'Active' },
+        { id: 'p8', name: 'Ramsay Chose', number: '9', position: 'Striker', nationality: 'Not specified', status: 'Active' },
+        { id: 'p9', name: 'Para', number: '10', position: 'Attacking midfielder', nationality: 'Not specified', status: 'Active' },
+        { id: 'p10', name: 'Calvin', number: '11', position: 'Left winger', nationality: 'Not specified', status: 'Active' }
       ],
       fixtures: [
         { id: 'f1', date: '2026-10-10T16:00', opponent: 'City FC', competition: 'Premier League', venue: 'Scorpion Stadium', status: 'Scheduled' },
@@ -265,7 +271,7 @@
       players: [
         { name: 'name', label: 'Player name', type: 'text', required: true, maxLength: 70 },
         { name: 'number', label: 'Squad number', type: 'number', required: true, min: 1, max: 99 },
-        { name: 'position', label: 'Position', type: 'select', required: true, options: ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'] },
+        { name: 'position', label: 'Position', type: 'select', required: true, options: ['Goalkeeper', 'Defender', 'Midfielder', 'Attacking midfielder', 'Winger', 'Left winger', 'Striker', 'Forward'] },
         { name: 'nationality', label: 'Nationality', type: 'text', required: true, maxLength: 50 },
         { name: 'status', label: 'Status', type: 'select', required: true, options: ['Active', 'Injured', 'Unavailable'] }
       ],
